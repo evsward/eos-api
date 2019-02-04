@@ -49,6 +49,17 @@ THE SOFTWARE.
  *                      MACRO                     *
  *                   Definitions                  *
  **************************************************/
+#define EOSIO_TESTNET_JUNGLE "eosio_testnet_jungle"
+#define EOSIO_MAINNET "eosio_mainnet"
+
+#ifndef ORACLIZE_NETWORK
+  #define ORACLIZE_NETWORK EOSIO_TESTNET_JUNGLE
+#endif
+
+//#if ORACLIZE_NETWORK != EOSIO_TESTNET_JUNGLE && ORACLIZE_NETWORK != EOSIO_MAINNET
+//  #error Unknown Oraclize context name
+//#endif
+
 #ifndef ORACLIZE_PAYER
 #define ORACLIZE_PAYER _self
 #endif // ORACLIZE_PAYER
@@ -57,14 +68,6 @@ THE SOFTWARE.
 #define oraclize_newRandomDSQuery(...) __oraclize_newRandomDSQuery(ORACLIZE_PAYER, __VA_ARGS__, _self)
 #define oraclize_queryId_localEmplace(...) __oraclize_queryId_localEmplace(__VA_ARGS__, _self)
 #define oraclize_queryId_match(...) __oraclize_queryId_match(__VA_ARGS__, _self)
-
-#ifndef ORACLIZE_NETWORK
-  #define ORACLIZE_NETWORK "eosio_testnet_jungle"
-#endif
-
-//#if ORACLIZE_NETWORK != "eosio_mainnet" && ORACLIZE_NETWORK != "eosio_testnet_jungle"
-//  #error Unknown Oraclize context name
-//#endif
 
 
 using namespace eosio;
