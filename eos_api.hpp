@@ -49,16 +49,20 @@ THE SOFTWARE.
  *                      MACRO                     *
  *                   Definitions                  *
  **************************************************/
-#define EOSIO_TESTNET_JUNGLE "eosio_testnet_jungle"
-#define EOSIO_MAINNET "eosio_mainnet"
+#define EOSIO_MAINNET 0
+#define EOSIO_TESTNET_JUNGLE 1
 
 #ifndef ORACLIZE_NETWORK
   #define ORACLIZE_NETWORK EOSIO_TESTNET_JUNGLE
 #endif
 
-//#if ORACLIZE_NETWORK != EOSIO_TESTNET_JUNGLE && ORACLIZE_NETWORK != EOSIO_MAINNET
-//  #error Unknown Oraclize context name
-//#endif
+#if ORACLIZE_NETWORK == EOSIO_TESTNET_JUNGLE
+ #define ORACLIZE_NETWORK_STR "eosio_testnet_jungle"
+#elif ORACLIZE_NETWORK == EOSIO_MAINNET
+ #define ORACLIZE_NETWORK_STR "eosio_mainnet"
+#else
+  #error Unknown Oraclize context name
+#endif
 
 #ifndef ORACLIZE_PAYER
 #define ORACLIZE_PAYER _self
@@ -1622,7 +1626,7 @@ uint8_t oraclize_randomDS_proofVerify(const capi_checksum256 queryId, const std:
     capi_checksum256 keyhash_sha;
     sha256((char *)keyhash, sizeof(keyhash), &keyhash_sha);
     capi_checksum256 calc_hash;
-    std::string context_name_str = ORACLIZE_NETWORK;
+    std::string context_name_str = ORACLIZE_NETWORK_STR;
     char context_name[context_name_str.size()]; 
     context_name_str.copy(context_name, context_name_str.size());
     uint8_t tbh2[sizeof(context_name) + sizeof(queryId.hash)];
