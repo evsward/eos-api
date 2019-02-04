@@ -49,19 +49,9 @@ THE SOFTWARE.
  *                      MACRO                     *
  *                   Definitions                  *
  **************************************************/
-#define EOSIO_MAINNET 0
-#define EOSIO_TESTNET_JUNGLE 1
-
-#ifndef ORACLIZE_NETWORK
-  #define ORACLIZE_NETWORK EOSIO_TESTNET_JUNGLE
-#endif
-
-#if ORACLIZE_NETWORK == EOSIO_TESTNET_JUNGLE
- #define ORACLIZE_NETWORK_STR "eosio_testnet_jungle"
-#elif ORACLIZE_NETWORK == EOSIO_MAINNET
- #define ORACLIZE_NETWORK_STR "eosio_mainnet"
-#else
-  #error Unknown Oraclize context name
+#ifndef ORACLIZE_NETWORK_NAME
+  #warning ORACLIZE_NETWORK_NAME is not set, setting it to "eosio_unknown".. [possible values are "eosio_mainnet"/"eosio_testnet_jungle"/"eosio_unknown"]
+  #define ORACLIZE_NETWORK_NAME "eosio_unknown"
 #endif
 
 #ifndef ORACLIZE_PAYER
@@ -1157,9 +1147,6 @@ const uint8_t LEDGERKEY[64] = {
     127, 185, 86, 70, 156, 92, 155, 137, 132, 13, 85, 180, 53, 55, 230, 106, 152, 221, 72, 17, 234, 10, 39, 34, 66, 114, 194, 229, 98, 41, 17, 232, 83, 122, 47, 142, 134, 164, 107, 174, 200, 40, 100, 233, 141, 208, 30, 156, 204, 47, 139, 197, 223, 201, 203, 229, 169, 26, 41, 4, 152, 221, 150, 228
 };
 
-// Select the network
-const char context_name_sample[] = {'e','o','s','i','o','_','t','e','s','t','n','e','t','_','j','u','n','g','l','e'};
-//const char context_name[] = {'e','o','s','i','o','_','m','a','i','n','n','e','t'};
 
 /**************************************************
  *                     TABLES                     *
@@ -1626,7 +1613,7 @@ uint8_t oraclize_randomDS_proofVerify(const capi_checksum256 queryId, const std:
     capi_checksum256 keyhash_sha;
     sha256((char *)keyhash, sizeof(keyhash), &keyhash_sha);
     capi_checksum256 calc_hash;
-    std::string context_name_str = ORACLIZE_NETWORK_STR;
+    std::string context_name_str = ORACLIZE_NETWORK_NAME;
     char context_name[context_name_str.size()]; 
     context_name_str.copy(context_name, context_name_str.size());
     uint8_t tbh2[sizeof(context_name) + sizeof(queryId.hash)];
